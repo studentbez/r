@@ -10,8 +10,8 @@ loop do
   cost = gets.chomp.to_f
   print "Введите количество товара: "
   count = gets.chomp.to_f
-  sum += cost*count
-  inventar[item] = {Cost: cost, Counts: count, Result: cost*count}
+  inventar[item] = {"цена": cost, "количество": count} 
+  sum += cost * count
 end
-inventar.each{|key, value| puts "Товар #{key}: #{value}"}
+inventar.each { |key, value| puts "Товар #{key}: #{value}, стоит #{value[:"цена"] * value[:"количество"]}"}
 puts "Итого: #{sum}"

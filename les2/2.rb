@@ -1,4 +1,4 @@
 #"массив с числами от 10 до 100 с шагом 5"
-ar = []
-10.step(100, 5){|i| ar << i}
-print ar
+numbers = []
+10.step(100, 5) { |i| numbers << i }
+print numbers
