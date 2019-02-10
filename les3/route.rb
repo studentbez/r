@@ -1,4 +1,4 @@
-class Route 
+class Route
   attr_reader :stations
   
   def initialize(first_station, last_station)
@@ -11,5 +11,9 @@ class Route
 
   def delete(station)
     @stations.delete(station)
+  end
+
+  def list
+    @stations.collect { |station| station.name }
   end
 end
