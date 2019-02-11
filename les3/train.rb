@@ -1,8 +1,8 @@
 class Train
-  attr_reader :speed, :count, :train_name, :type, :station_index, :station
+  attr_accessor :speed, :count, :name, :type, :station_index, :station, :route
 
   def initialize(name, type, count)
-    @train_name = name
+    @name = name
     @type = type
     @count = count
     @speed = 0
@@ -31,22 +31,17 @@ class Train
     self.station = self.route.stations[0]
     self.station_index = self.route.stations.index(self.station)
     self.station.arrived(self)
-    return "add_route true"
   end
 
   def next_station
     if self.route.stations[self.station_index + 1]
-      puts self.route.stations[self.station_index + 1].name
-    else
-      puts "#{self.station.name} конец маршрута."
+      self.route.stations[self.station_index + 1]
     end
   end
 
   def previous_station
     if self.station_index - 1 >= 0
-      puts self.route.stations[self.station_index - 1].name
-    else
-      puts "#{self.station.name} начало маршрута."
+     self.route.stations[self.station_index - 1]
     end
   end
 
@@ -55,13 +50,19 @@ class Train
     self.route.stations[self.station_index].departed(self)
   end
 
-  def move(direction)
-    if (direction == "+") && (self.route.stations[self.station_index + 1] != nil)
-      self.station = self.route.stations[self.station_index + 1]
+  def move_forward
+    if next_station
+      self.station = next_station #self.route.stations[self.station_index + 1]
       self.train_way
       self.station_index += 1
-    elsif (direction == "-") && (self.station_index - 1 >= 0)
-      self.station = self.route.stations[self.station_index - 1]
+    else
+      puts "Конечная. Поезд дальше не идет."
+    end
+  end
+
+  def move_back
+    if previous_station
+      self.station = previous_station #self.route.stations[self.station_index - 1]
       self.train_way
       self.station_index -= 1
     else
