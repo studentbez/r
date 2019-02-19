@@ -1,6 +1,4 @@
-class Cargo_van
-  attr_accessor :type
-
+class CargoVan < Van
   def initialize()
     @type = "Грузовой"
   end

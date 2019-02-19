@@ -1,8 +1,8 @@
-class Cargo_train < Train 
+class CargoTrain < Train 
   def initialize(name)
     super
     @name = name
     @type = "Грузовой"
-    @vans.push(Cargo_van.new(1))
+    @vans << CargoVan.new()
   end
 end

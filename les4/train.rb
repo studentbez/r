@@ -73,7 +73,6 @@ class Train
 
   def wrong_move#этот метод не нужен пользователю для вызова, и используется локально
     return puts "Сначала остановите поезд."  if @speed > 0
-    return puts "Ошибка" if @vans.count <=1 
   end
 
   def train_way#аналогично верхнему
