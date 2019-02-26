@@ -1,5 +1,5 @@
 class CargoVan < Van
-  def initialize()
+  def initialize
     @type = "Грузовой"
   end
 end

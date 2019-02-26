@@ -6,10 +6,6 @@ class Train
 
   @@trains = {}
 
-  def self.find(number)
-    @@trains[number]
-  end
-
   def initialize(name, number)
     @name = name
     @vans = []
@@ -17,6 +13,10 @@ class Train
     @type = type
     @@trains[number] = self
     register_instance
+  end
+
+  def self.find(number)
+    @@trains[number]
   end
 
   def speed_gather

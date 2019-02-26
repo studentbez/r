@@ -1,5 +1,5 @@
 class PassengerVan < Van
-  def initialize()
+  def initialize
     @type = "Пассажирский"
   end
 end

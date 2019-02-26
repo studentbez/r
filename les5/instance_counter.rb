@@ -1,21 +1,19 @@
 module InstanceCounter
-  attr_accessor :count_of_instances
-
-  @@count_of_instances = 0
-
   def self.included(base)
-    base.include(InstanseMethods)
+    base.include(InstanceMethods)
+    base.extend(CouldntThinkOf)
   end
 
-  def self.instances
-    @@count_of_instances
+  protected
+
+  module CouldntThinkOf
+    attr_accessor :instances
   end
 
-  module InstanseMethods
-    protected
-
+  module InstanceMethods
     def register_instance
-      @@count_of_instances += 1
+      self.class.instances = 0 if self.class.instances == nil 
+      self.class.instances += 1
     end
   end
 end
