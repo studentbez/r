@@ -1,12 +1,12 @@
 module InstanceCounter
   def self.included(base)
     base.include(InstanceMethods)
-    base.extend(CouldntThinkOf)
+    base.extend(Instances)
   end
 
   protected
 
-  module CouldntThinkOf
+  module Instances
     attr_accessor :instances
   end
 
