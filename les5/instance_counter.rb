@@ -8,11 +8,14 @@ module InstanceCounter
 
   module Instances
     attr_accessor :instances
+
+    def instances
+      @instances = 0
+    end
   end
 
   module InstanceMethods
     def register_instance
-      self.class.instances = 0 if self.class.instances == nil 
       self.class.instances += 1
     end
   end
