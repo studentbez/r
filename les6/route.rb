@@ -28,11 +28,8 @@ class Route
   end
 
   def validate!
-    raise "Некорректный тип станции" if !station_valid(@stations.first) && !station_valid(@stations.last)
+    raise "Некорректный тип станции" if !@stations.bsearch { |station| station.class != Station }.nil?
+    raise "Станций должно быть >= 2" if @stations.count < 2
     true
-  end
-
-  def station_valid(station)
-    station.class == Station
   end
 end

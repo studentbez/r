@@ -10,8 +10,8 @@ class Station
   def initialize(name)
     @trains = {}
     @name = name
-    @@all_stations.push(self)
     validate!
+    @@all_stations.push(self)
     register_instance
   end
 

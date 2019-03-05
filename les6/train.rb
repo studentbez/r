@@ -14,8 +14,8 @@ class Train
     @vans = []
     @speed = 0
     @type = type
-    @@trains[number] = self
     validate!
+    @@trains[number] = self
     register_instance
   end
 
@@ -65,8 +65,6 @@ class Train
       self.station = next_station
       self.train_way
       self.station_index += 1
-    else
-      puts "Конечная. Поезд дальше не идет." 
     end
   end
 
@@ -75,8 +73,6 @@ class Train
       self.station = previous_station
       self.train_way
       self.station_index -= 1
-    else
-      puts "Конечная. Поезд дальше не идет."
     end
   end
 

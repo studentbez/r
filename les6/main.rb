@@ -49,7 +49,7 @@ def menu_2(picked)
   when "8" then checklist
   when "9.1" then show_trains
   when "9.2" then train_on_station
-  when "0" then return exit
+  when "0" then exit
   end 
   menu
 end
@@ -166,11 +166,13 @@ end
 
 def train_to_next_station
   train_choise
+  return error_move if @trains_list[@train_number - 1].move_forward.nil?
   @trains_list[@train_number - 1].move_forward
 end
 
 def train_to_previous_station
   train_choise
+  return error_move if @trains_list[@train_number - 1].move_back.nil?
   @trains_list[@train_number - 1].move_back
 end
 
@@ -205,6 +207,11 @@ end
 
 def error
   puts "!!Ошибка!!"
+  menu
+end
+
+def error_move
+  puts "Конечная. Поезд дальше не идет."
   menu
 end
 
