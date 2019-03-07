@@ -1,4 +1,4 @@
- class Train
+ class Train 
   include Corporation
   include InstanceCounter
 
@@ -77,8 +77,10 @@
   end
 
   def all_vans_in_train
+    index = 0
     @vans.each do |van|
-      yield "#{vans.index(van) + 1} №#{van.number} *#{van.type}* Свободно:#{van.place} Занято:#{van.taked_place}"
+      print "#{index += 1} "
+      yield van
     end
   end
 

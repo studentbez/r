@@ -26,7 +26,7 @@ def menu
     --7.1 Переместить поезд по маршруту вперед--
     --7.2 Переместить поезд по маршруту назад--
   --8 Занять место или объем в вагоне--
-    --9.1 Просмотреть список станций
+    --9.1 Просмотреть список станций 
     --9.2 Просмотреть список поездов--
     --9.3 Просмотреть список поездов на станции--
     --9.4 Просмотреть список вагонов поезда--
@@ -144,7 +144,7 @@ end
 
 def van_list
   train_choise
-  @trains_list[@train_number - 1].all_vans_in_train { |van| puts van}
+  @trains_list[@train_number - 1].all_vans_in_train { |van| puts "No #{van.number} *#{van.type}* Свободно:#{van.place} Занято:#{van.taked_place}"}
 end
 
 def stations_of_route
@@ -204,7 +204,7 @@ def train_on_station
   number = gets.chomp.to_i
   return error if !(1..@stations_list.length).include?(number)
   puts "Список поездов на станции: "
-  @stations_list[number - 1].all_trains_on_station { |train| puts train}
+  @stations_list[number - 1].all_trains_on_station { |train| puts "Поезд: #{train.number} Кол-во вагонов: #{train.vans.count}"}
 end
 
 def train_choise

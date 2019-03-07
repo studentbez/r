@@ -47,7 +47,8 @@ class Station
   def all_trains_on_station
     index = 0
     @trains.each do |train|
-      yield "#{index += 1} Поезд: #{train.number} Кол-во вагонов: #{train.vans.count}"
+      print "#{index += 1} "
+      yield train
     end
   end
 end
