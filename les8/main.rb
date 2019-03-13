@@ -26,25 +26,14 @@ def menu
 end
 
 def menu_2(picked)
-  case picked
-  when 1 then create_station
-  when 2 then create_train
-  when 3 then ctreate_route
-  when 4 then add_station
-  when 5 then delete_station
-  when 6 then add_route_to_train
-  when 7 then attach_van
-  when 8 then unhook_van
-  when 9 then train_to_next_station
-  when 10 then train_to_previous_station
-  when 11 then change_vans_value
-  when 12 then checklist
-  when 13 then show_trains
-  when 14 then train_on_station
-  when 15 then van_list
-  when 0 then exit
-  end
-  menu
+  menu_choise = {
+    1 => create_station, 2 => create_train, 3 => ctreate_route,
+    4 => add_station, 5 => delete_station, 6 => add_route_to_train,
+    7 => attach_van, 8 => unhook_van, 9 => train_next_station,
+    10 => train_previous_station, 11 => change_vans_value, 12 => checklist,
+    13 => show_trains, 14 => train_on_station, 15 => van_list, 0 => exit
+  }
+  menu_choise[picked]
 end
 
 def pick
@@ -89,14 +78,21 @@ def ctreate_route
   return puts 'Нужно хотя бы две стании' if @stations_list.count < 2
 
   checklist
-  print 'Введите номер начальной станции: '
-  first_station = gets.chomp.to_i
-  print 'Введите номер конечной: '
-  last_station = gets.chomp.to_i
+  number_of_station
   list_count = (1..@stations_list.length)
-  return error unless list_count.cover?(first_station && last_station) && (first_station != last_station)
+  rule = list_count.cover?(@sta + 1 && @fin + 1) && (@sta + 1 != @fin + 1)
+  return error unless rule
 
-  @routes_list.push(Route.new(@stations_list[first_station - 1], @stations_list[last_station - 1]))
+  @routes_list.push(Route.new(@stations_list[@sta], @stations_list[@fin]))
+end
+
+def number_of_station
+  print 'Введите номер начальной станции: '
+  @sta = gets.chomp.to_i
+  print 'Введите номер конечной: '
+  @fin = gets.chomp.to_i
+  @sta -= 1
+  @fin -= 1
 end
 
 def van_create
@@ -127,7 +123,8 @@ def add_station
   route_choise
   checklist
   control
-  @routes_list[@route_number - 1].stations.each { |station| error if @stations_list[@number - 1] == station }
+  station = @stations_list[@number - 1]
+  @routes_list[@route_number - 1].stations.each { |s| error if station == s }
   @routes_list[@route_number - 1].add(@stations_list[@number - 1])
 end
 
@@ -143,7 +140,9 @@ end
 def checklist
   if !@stations_list.empty?
     puts 'Список станций:'
-    @stations_list.each { |station| puts "#{@stations_list.index(station) + 1} #{station.name}" }
+    @stations_list.each do |station|
+      puts "#{@stations_list.index(station) + 1} #{station.name}"
+    end
   else
     blank
   end
@@ -151,18 +150,28 @@ end
 
 def van_list
   train_choise
-  @trains_list[@train_number - 1].all_vans_in_train { |van| puts "No #{van.number} *#{van.type}* Свободно:#{van.place} Занято:#{van.taked_place}" }
+  @trains_list[@train_number - 1].all_vans_in_train do |van|
+    print "No #{van.number}*"
+    print " #{van.type}"
+    print " *Свободно:#{van.place}"
+    print " Занято:#{van.taked_place}\n"
+  end
 end
 
 def stations_of_route
   puts 'Список станций маршрута:'
-  @routes_list[@route_number - 1].stations.each { |station| puts "#{@routes_list[@route_number - 1].stations.index(station) + 1} #{station.name}" }
+  @routes_list[@route_number - 1].stations.each do |station|
+    print @routes_list[@route_number - 1].stations.index(station) + 1
+    print " #{station.name}\n"
+  end
 end
 
 def route_choise
   if !@routes_list.empty?
     puts 'Выберите и введите номер маршрута: '
-    @routes_list.each { |value| puts "#{@routes_list.index(value) + 1}) #{value.list}" }
+    @routes_list.each do |value|
+      puts "#{@routes_list.index(value) + 1}) #{value.list}"
+    end
     @route_number = gets.chomp.to_i
     error unless (1..@routes_list.length).cover?(@route_number)
   else
@@ -193,14 +202,14 @@ def unhook_van
   @trains_list[@train_number - 1].unhook
 end
 
-def train_to_next_station
+def train_next_station
   train_choise
   return error_move if @trains_list[@train_number - 1].move_forward.nil?
 
   @trains_list[@train_number - 1].move_forward
 end
 
-def train_to_previous_station
+def train_previous_station
   train_choise
   return error_move if @trains_list[@train_number - 1].move_back.nil?
 
@@ -214,7 +223,9 @@ def train_on_station
   return error unless (1..@stations_list.length).cover?(number)
 
   puts 'Список поездов на станции: '
-  @stations_list[number - 1].all_trains_on_station { |train| puts "Поезд: #{train.number} Кол-во вагонов: #{train.vans.count}" }
+  @stations_list[number - 1].all_trains_on_station do |train|
+    puts "Поезд: #{train.number} Кол-во вагонов: #{train.vans.count}"
+  end
 end
 
 def train_choise
@@ -226,7 +237,9 @@ end
 
 def show_trains
   if !@trains_list.empty?
-    @trains_list.each { |value| puts "#{@trains_list.index(value) + 1}) #{value.number} *#{value.type}*" }
+    @trains_list.each do |value|
+      puts "#{@trains_list.index(value) + 1}) #{value.number} *#{value.type}*"
+    end
   else
     blank
   end
@@ -235,18 +248,23 @@ end
 def change_vans_value
   van_list
   print 'Выберите вагон:'
-  van_index = gets.chomp.to_i
-  return error unless (1..@trains_list[@train_number - 1].vans.length).cover?(van_index)
+  @van_index = gets.chomp.to_i
+  rule = (1..@trains_list[@train_number - 1].vans.length).cover?(@van_index)
+  return error unless rule
 
   if @trains_list[@train_number - 1].type == 'Passenger'
-    @trains_list[@train_number - 1].vans[van_index - 1].take_seat
+    @trains_list[@train_number - 1].vans[@van_index - 1].take_seat
   elsif @trains_list[@train_number - 1].type == 'Cargo'
-    print 'Введите занимаемый объем:'
-    volume = gets.chomp.to_f
-    return error_value unless (0..138.0).cover?(volume)
-
-    @trains_list[@train_number - 1].vans[van_index - 1].take_volume(volume)
+    cargo_van
   end
+end
+
+def cargo_van
+  print 'Введите занимаемый объем:'
+  volume = gets.chomp.to_f
+  return error_value unless (0..138.0).cover?(volume)
+
+  @trains_list[@train_number - 1].vans[@van_index - 1].take_volume(volume)
 end
 
 def blank
