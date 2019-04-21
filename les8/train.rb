@@ -1,11 +1,12 @@
 class Train
   include Corporation
   include InstanceCounter
+  include Validation
+  extend Accessor
 
   attr_reader :speed, :station_index, :station, :route, :vans, :type, :number
-
-  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}(-| )[A-Z0-9]{2}$/.freeze
-  TRAIN_TYPE = /^(Passenger|Cargo)$/.freeze
+  validate :number, :format, /^[A-Z0-9]{3}(-| )[A-Z0-9]{2}$/
+  validate :type, :format, /^(Passenger|Cargo)$/
 
   def initialize(number, type)
     @number = number
@@ -93,18 +94,5 @@ class Train
   def train_way
     station.arrived(self)
     route.stations[self.station_index].departed(self)
-  end
-
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
-
-  def validate!
-    raise 'Некорректный номер' if number !~ TRAIN_NUMBER_FORMAT
-    raise 'Неккоректный тип поезда' if type !~ TRAIN_TYPE
-
-    true
   end
 end

@@ -1,9 +1,10 @@
 class Station
   include InstanceCounter
+  include Validation
+  extend Accessor
 
   attr_reader :trains, :name
-
-  NAME = /^[A-Z0-9]{2,}((-| )[A-Z0-9]+$|$|(-| )[A-Z0-9]+(-| )[A-Z0-9]+$)/.freeze
+  validate :name, :format, /^[A-Z0-9]{2,}((-| )[A-Z0-9]+$|$|(-| )[A-Z0-9]+(-| )[A-Z0-9]+$)/ 
 
   def initialize(name)
     @trains = []
@@ -35,18 +36,6 @@ class Station
     @trains.delete(train.number)
   end
 
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
-
-  def validate!
-    raise 'Некорректное название станции' if name !~ NAME
-
-    true
-  end
-
   def all_trains_on_station
     index = 0
     @trains.each do |train|
@@ -55,3 +44,8 @@ class Station
     end
   end
 end
+
+bad = Station.new("moskva")
+p Station.instance_methods
+p Station.attr_accessor_with_history(:arg1, :arg2)
+p Station.strong_attr_accessor(:arg3, Station)

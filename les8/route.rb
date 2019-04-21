@@ -1,10 +1,19 @@
 class Route
   include InstanceCounter
+  include Validation
+  extend Accessor
 
   attr_reader :stations
+  validate :first, :presence
+  validate :first, :type, Station
+  validate :last, :presence
+  validate :last, :type, Station
+
 
   def initialize(first_station, last_station)
-    @stations = [first_station, last_station]
+    @first = first_station
+    @last = last_station
+    @stations = [first, last]
     validate!
     register_instance
   end
@@ -19,22 +28,5 @@ class Route
 
   def list
     @stations.collect(&:name)
-  end
-
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
-
-  def validate!
-    raise 'Некорректный тип станции' if @stations.any? { |s| unequal(s) }
-    raise 'Станций должно быть >= 2' if @stations.count < 2
-
-    true
-  end
-
-  def unequal(station)
-    station.class != Station
   end
 end
