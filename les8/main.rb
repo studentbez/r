@@ -57,13 +57,14 @@ def valid_test
   --2 valid train type
   --3 valid route
   --4 valid station name
-  --0 exit"
+  --5 valid type of class"
   pick = gets.chomp.to_i
   case pick
   when 1 then Train.new("fk k", "Cargo")
   when 2 then Train.new("23F BB", "blabla")
   when 3 then Route.new("", "")
   when 4 then Station.new("moskva")
+  when 5 then Train.new("23F MF", 34)
   end
 end
 

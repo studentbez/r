@@ -7,6 +7,7 @@ class Train
   attr_reader :speed, :station_index, :station, :route, :vans, :type, :number
   validate :number, :format, /^[A-Z0-9]{3}(-| )[A-Z0-9]{2}$/
   validate :type, :format, /^(Passenger|Cargo)$/
+  validate :type, :type, String
 
   def initialize(number, type)
     @number = number
