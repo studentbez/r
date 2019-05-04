@@ -17,31 +17,54 @@ require_relative 'station'
 
 def menu
   puts "--Для ввода используйте английскую расскладку и заглавные буквы
+  --00 VALID TEST
   --1 Создать станцию\n  --2 Создать поезд\n  --3 Создать маршрут
   --4 Добавить станцию к маршруту\n  --5 Удалить станцию из маршрута
   --6 Назначить маршрут поезду\n  --7 Добавить вагоны к поезду
-  --7 Отцепить вагоны от поезда\n  --8 Переместить поезд по маршруту вперед
-  --9 Переместить поезд по маршруту назад\n  --10 Занять место или объем
-  --11 Cписок станций\n  --12 Cписок поездов
-  --13 Cписок поездов на станции\n  --14 Cписок вагонов поезда\n  --0 Выход"
-  pick
-end
-
-def menu_2(picked)
-  menu_choise = {
-    1 => create_station, 2 => create_train, 3 => ctreate_route,
-    4 => add_station, 5 => delete_station, 6 => add_route_to_train,
-    7 => attach_van, 8 => unhook_van, 9 => train_next_station,
-    10 => train_previous_station, 11 => change_vans_value, 12 => checklist,
-    13 => show_trains, 14 => train_on_station, 15 => van_list, 0 => exit
-  }
-  menu_choise[picked]
-end
-
-def pick
+  --8 Отцепить вагоны от поезда\n  --9 Переместить поезд по маршруту вперед
+  --10 Переместить поезд по маршруту назад\n  --11 Занять место или объем
+  --12 Cписок станций\n  --13 Cписок поездов
+  --14 Cписок поездов на станции\n  --15 Cписок вагонов поезда\n  --0 Выход"
   print 'Введите номер выбранного пункта: '
   picked = gets.chomp.to_i
   menu_2(picked)
+end
+
+def menu_2(picked)
+  case picked
+  when 1 then create_station
+  when 2 then create_train
+  when 3 then ctreate_route
+  when 4 then add_station 
+  when 5 then delete_station 
+  when 6 then add_route_to_train 
+  when 7 then attach_van
+  when 8 then unhook_van 
+  when 9 then train_to_next_station 
+  when 10 then train_to_previous_station
+  when 11 then change_vans_value
+  when 12 then checklist
+  when 13 then show_trains
+  when 14 then train_on_station
+  when 15 then van_list
+  when 00 then valid_test
+  when 0 then exit
+  end
+end
+
+def valid_test
+  puts "\n  --1 valid train name
+  --2 valid train type
+  --3 valid route
+  --4 valid station name
+  --0 exit"
+  pick = gets.chomp.to_i
+  case pick
+  when 1 then Train.new("fk k", "Cargo")
+  when 2 then Train.new("23F BB", "blabla")
+  when 3 then Route.new("", "")
+  when 4 then Station.new("moskva")
+  end
 end
 
 def create_station
@@ -49,8 +72,6 @@ def create_station
   name = gets.chomp
   @stations_list.each { |station| error if station.name == name }
   @stations_list.push(Station.new(name))
-rescue StandartError => e
-  puts e.message
   create_station
 end
 
@@ -61,8 +82,6 @@ def create_train
   puts "Выберите его тип:\n1 - Пассажирский;\n2 - Грузовой."
   picked = gets.chomp.to_i
   choise(picked)
-rescue StandartError => e
-  puts e.message
   create_train
 end
 
@@ -73,6 +92,17 @@ def choise(picked)
     @trains_list.push(CargoTrain.new(number))
   else
     error
+  end
+end
+
+def checklist
+  if @stations_list.empty?
+    blank
+  else
+    puts 'Список станций:'
+    @stations_list.each do |station|
+      puts "#{@stations_list.index(station) + 1} #{station.name}"
+    end
   end
 end
 
@@ -139,17 +169,6 @@ def delete_station
   @routes_list[@route_number - 1].delete(@stations_list[@number - 1])
 end
 
-def checklist
-  if !@stations_list.empty?
-    puts 'Список станций:'
-    @stations_list.each do |station|
-      puts "#{@stations_list.index(station) + 1} #{station.name}"
-    end
-  else
-    blank
-  end
-end
-
 def van_list
   train_choise
   @trains_list[@train_number - 1].all_vans_in_train do |van|
@@ -169,15 +188,15 @@ def stations_of_route
 end
 
 def route_choise
-  if !@routes_list.empty?
+  if @routes_list.empty?
+    blank
+  else
     puts 'Выберите и введите номер маршрута: '
     @routes_list.each do |value|
       puts "#{@routes_list.index(value) + 1}) #{value.list}"
     end
     @route_number = gets.chomp.to_i
     error unless (1..@routes_list.length).cover?(@route_number)
-  else
-    blank
   end
 end
 

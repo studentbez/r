@@ -45,7 +45,6 @@ class Station
   end
 end
 
-bad = Station.new("moskva")
 p Station.instance_methods
 p Station.attr_accessor_with_history(:arg1, :arg2)
 p Station.strong_attr_accessor(:arg3, Station)

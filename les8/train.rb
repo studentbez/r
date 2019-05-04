@@ -19,7 +19,7 @@ class Train
   end
 
   def self.find(number)
-    @@trains[number]
+    @trains[number]
   end
 
   def trains

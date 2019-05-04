@@ -5,15 +5,12 @@ class Route
 
   attr_reader :stations
   validate :first, :presence
-  validate :first, :type, Station
   validate :last, :presence
-  validate :last, :type, Station
-
 
   def initialize(first_station, last_station)
     @first = first_station
     @last = last_station
-    @stations = [first, last]
+    @stations = [@first, @last]
     validate!
     register_instance
   end
@@ -27,6 +24,6 @@ class Route
   end
 
   def list
-    @stations.collect(&:name)
+    @stations.collect { |station| station.name }
   end
 end

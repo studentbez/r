@@ -32,19 +32,19 @@ module Validation
       true
     end
 
-    def validate_presence(name, value)
+    def validate_presence(name, value, _)
       return unless value.nil? || value.empty?
-      raise "#{name} Не может быть nil или пустым"
+      raise "Не может быть nil или пустым"
     end
 
     def validate_format(name, value, format)
       return if value =~ format
-      raise "#{name} Некорректный формат"
+      raise "Некорректный формат"
     end
 
     def validate_type(name, value, type)
       return if value != type
-      raise TypeError, "#{name} Некорректный тип"
+      raise "Некорректный тип"
     end
   end
 end
