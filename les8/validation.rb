@@ -18,33 +18,29 @@ module Validation
   module InstanceMethods
     def valid?
       validate!
+      true
     rescue StandardError
       false
     end
 
     def validate!
       self.class.validations.each do |validation|
-        name = validation[:name]
-        current_value = instance_variable_get("@#{name}".to_sym)
+        current_value = instance_variable_get("@#{validation[:name]}".to_sym)
         method = "validate_#{validation[:validation_type]}".to_sym
-        send(method, name, current_value, validation[:other])
+        send(method, validation[:name], current_value, validation[:other])
       end
-      true
     end
 
     def validate_presence(name, value, _)
-      return unless value.nil? || value.empty?
-      raise "Не может быть nil или пустым"
+      raise "Не может быть nil или пустым" if value.nil? || value == ''
     end
 
     def validate_format(name, value, format)
-      return if value =~ format
-      raise "Некорректный формат"
+      raise "Некорректный формат" if value !~ format
     end
 
     def validate_type(name, value, type)
-      return if value != type
-      raise "Некорректный тип"
+      raise "Некорректный тип" if value != type
     end
   end
 end

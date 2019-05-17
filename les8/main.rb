@@ -16,18 +16,22 @@ require_relative 'station'
 @routes_list = []
 
 def menu
-  puts "--Для ввода используйте английскую расскладку и заглавные буквы
-  --00 VALID TEST
-  --1 Создать станцию\n  --2 Создать поезд\n  --3 Создать маршрут
-  --4 Добавить станцию к маршруту\n  --5 Удалить станцию из маршрута
-  --6 Назначить маршрут поезду\n  --7 Добавить вагоны к поезду
-  --8 Отцепить вагоны от поезда\n  --9 Переместить поезд по маршруту вперед
-  --10 Переместить поезд по маршруту назад\n  --11 Занять место или объем
-  --12 Cписок станций\n  --13 Cписок поездов
-  --14 Cписок поездов на станции\n  --15 Cписок вагонов поезда\n  --0 Выход"
-  print 'Введите номер выбранного пункта: '
-  picked = gets.chomp.to_i
-  menu_2(picked)
+  loop do
+    puts "--Для ввода используйте английскую расскладку и заглавные буквы
+    --1 Создать станцию\n    --2 Создать поезд\n    --3 Создать маршрут
+    --4 Добавить станцию к маршруту\n    --5 Удалить станцию из маршрута
+    --6 Назначить маршрут поезду\n    --7 Добавить вагоны к поезду
+    --8 Отцепить вагоны от поезда\n    --9 Переместить поезд по маршруту вперед
+    --10 Переместить поезд по маршруту назад\n    --11 Занять место или объем
+    --12 Cписок станций\n    --13 Cписок поездов
+    --14 Cписок поездов на станции\n    --15 Cписок вагонов поезда\n    --00 Выход"
+    print 'Введите номер выбранного пункта: '
+    picked = gets.chomp.to_i
+
+    break if picked == 15
+
+    menu_2(picked)
+  end
 end
 
 def menu_2(picked)
@@ -47,24 +51,7 @@ def menu_2(picked)
   when 13 then show_trains
   when 14 then train_on_station
   when 15 then van_list
-  when 00 then valid_test
-  when 0 then exit
-  end
-end
-
-def valid_test
-  puts "\n  --1 valid train name
-  --2 valid train type
-  --3 valid route
-  --4 valid station name
-  --5 valid type of class"
-  pick = gets.chomp.to_i
-  case pick
-  when 1 then Train.new("fk k", "Cargo")
-  when 2 then Train.new("23F BB", "blabla")
-  when 3 then Route.new("", "")
-  when 4 then Station.new("moskva")
-  when 5 then Train.new("23F MF", 34)
+  when 00 then exit
   end
 end
 
@@ -73,24 +60,26 @@ def create_station
   name = gets.chomp
   @stations_list.each { |station| error if station.name == name }
   @stations_list.push(Station.new(name))
-  create_station
+rescue Exception => e
+  puts e.message
 end
 
 def create_train
   print 'Введите номер поезда в формате ХХХ-ХХ или ХХХ ХХ: '
-  number = gets.chomp
-  @trains_list.each { |train| error if train.number == number }
-  puts "Выберите его тип:\n1 - Пассажирский;\n2 - Грузовой."
+  @number = gets.chomp
+  @trains_list.each { |train| error if train.number == @number }
+  print "Выберите его тип:\n1 - Пассажирский\n2 - Грузовой\n"
   picked = gets.chomp.to_i
   choise(picked)
-  create_train
+rescue Exception => e
+  puts e.message
 end
 
 def choise(picked)
   if picked == 1
-    @trains_list.push(PassengerTrain.new(number))
+    @trains_list.push(PassengerTrain.new(@number))
   elsif picked == 2
-    @trains_list.push(CargoTrain.new(number))
+    @trains_list.push(CargoTrain.new(@number))
   else
     error
   end

@@ -5,6 +5,7 @@ class Train
   extend Accessor
 
   attr_reader :speed, :station_index, :station, :route, :vans, :type, :number
+  validate :number, :presence
   validate :number, :format, /^[A-Z0-9]{3}(-| )[A-Z0-9]{2}$/
   validate :type, :format, /^(Passenger|Cargo)$/
   validate :type, :type, String
@@ -15,7 +16,7 @@ class Train
     @speed = 0
     @type = type
     validate!
-    @trains[number] = self
+    #@trains[number] = self
     register_instance
   end
 

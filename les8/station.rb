@@ -4,23 +4,26 @@ class Station
   extend Accessor
 
   attr_reader :trains, :name
-  validate :name, :format, /^[A-Z0-9]{2,}((-| )[A-Z0-9]+$|$|(-| )[A-Z0-9]+(-| )[A-Z0-9]+$)/ 
+  validate :name, :presence
+  validate :name, :format, /^[A-Z0-9]{2,}((-| )[A-Z0-9]+$|$|(-| )[A-Z0-9]+(-| )[A-Z0-9]+$)/
+
+  @@all_stations = []
 
   def initialize(name)
     @trains = []
     @name = name
     validate!
-    @all_stations.push(self)
+    @@all_stations.push(self)
     register_instance
   end
 
   def self.all
-    @all_stations
+    @@all_stations
   end
 
-  def all_stations
-    @all_stations = []
-  end
+  #def all_stations
+  #  @all_stations = []
+  #end
 
   def arrived(train)
     @trains.push(train)
@@ -45,6 +48,6 @@ class Station
   end
 end
 
-p Station.instance_methods
-p Station.attr_accessor_with_history(:arg1, :arg2)
-p Station.strong_attr_accessor(:arg3, Station)
+#p Station.instance_methods
+#p Station.attr_accessor_with_history(:arg1, :arg2)
+#p Station.strong_attr_accessor(:arg3, Station)
